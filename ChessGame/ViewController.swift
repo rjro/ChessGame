@@ -13,6 +13,14 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
+        
+        let chessBoard = ChessBoardView(frame: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
+        chessBoard.center = self.view.center
+        chessBoard.backgroundColor = UIColor.red
+       // chessBoard.highlightTile(row: 3, column: 3)
+        view.addSubview(chessBoard)
+        
+        
     }
 
 
