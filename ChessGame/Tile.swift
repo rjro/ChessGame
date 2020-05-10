@@ -8,22 +8,9 @@
 
 import Foundation
 
-enum TileParity {
-	case even, odd
-}
-
-struct Tile {
-	let row: Int
-	let column: Int
-	
-	var parity: TileParity {
-		if (row+column).isMultiple(of: 2) {
-			return .even
-		} else {
-			return .odd
-		}
-	}
-	
+struct Tile: Hashable {
+	var row: Int
+	var column: Int
 }
 
 
