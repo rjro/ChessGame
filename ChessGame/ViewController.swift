@@ -14,6 +14,7 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         
+		view.backgroundColor = .darkGray
         let chessBoard = ChessBoardView(frame: CGRect(origin: .zero, size: CGSize(width: 400, height: 400)))
         chessBoard.center = self.view.center
         chessBoard.backgroundColor = UIColor.red

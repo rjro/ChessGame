@@ -13,38 +13,35 @@ import UIKit
 
 class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	
-	
 	let board = Board(size: (8,8))
 	
 	
 	let tileAmount = 8
 	
 	var tileHighlighters = [UIView]()
-		
-	//TODO: move this somewhere else
-	private func isMoveAllowed(oldTile: Tile, newTile: Tile) -> Bool {
-		
-		if newTile.row == 3 {
-			return true
-		}
-		
-		return true
-	}
 	
 	
-
 	private func commonInit() {
-
-				
-		for tile in board.bishopMoves(tile: Tile(row: 5, column: 2)) {
-			board.state[tile.row][tile.column] = Piece(rank: .bishop)
-		}
-	
 		
+		
+		//for tile in board.bishopMoves(tile: Tile(row: 5, column: 2)) {
+		//	board.state[tile.row][tile.column] = Piece(rank: .bishop)
+		//}
+		
+		board.homeSetup()
 		for (piece, tile) in board.occupations() {
 			let pieceView = UIView(frame: rectForTile(tile))
 			//pieceView.alpha = 0.3
-			pieceView.backgroundColor = .red
+			
+			switch piece.rank {
+			case .pawn: pieceView.backgroundColor = .blue
+			case .knight: pieceView.backgroundColor = .green
+			case .rook: pieceView.backgroundColor = .yellow
+			case .bishop: pieceView.backgroundColor = .purple
+			case .queen: pieceView.backgroundColor = .cyan
+			case .king: pieceView.backgroundColor = .red
+			}
+			
 			pieceView.layer.cornerRadius = 40.0
 			pieceView.layer.zPosition = 2
 			pieceView.center = centerForTile(tile)
@@ -54,11 +51,11 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			pieceView.addGestureRecognizer(gr)
 			gr.delegate = self
 			
-
+			
 			addSubview(pieceView)
 		}
-
-				
+		
+		
 	}
 	
 	
@@ -67,8 +64,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		for tile in tiles {
 			let rect = rectForTile(tile)
 			let tileView = UIView(frame: rect)
-			tileView.backgroundColor = .yellow
-			tileView.alpha = 0.5
+			tileView.backgroundColor = .orange
 			tileView.layer.zPosition = 1
 			tileHighlighters.append(tileView)
 			addSubview(tileView)
@@ -80,7 +76,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		tileHighlighters.forEach { $0.removeFromSuperview() }
 		tileHighlighters.removeAll()
 	}
-		
+	
 	//gotta come up with a better solution than this
 	var dragStartTile: Tile?
 	
@@ -99,24 +95,16 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
 		removeAllHighlights()
 	}
-
+	
 	
 	@objc func dragView(sender: UIPanGestureRecognizer) {
 		let point = sender.location(in: self)
-		let tile = tileForPoint(point)
 		
-		print(sender.state.rawValue)
-	
 		guard let pieceView = sender.view else {
 			return
 		}
 		
-		if sender.state == .began {
-			
-			
-		}
 		
-
 		if sender.state == .ended {
 			removeAllHighlights()
 			
@@ -134,14 +122,13 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			dragStartTile = nil
 			
 			return
-
+			
 		}
-
-
+		
 		pieceView.center = point
 		
 	}
-
+	
 	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -152,7 +139,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		super.init(coder: coder)
 		commonInit()
 	}
-
+	
 	
 	override func draw(_ rect: CGRect) {
 		guard let context = UIGraphicsGetCurrentContext() else {
@@ -162,14 +149,14 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		for tile in tiles {
 			if (tile.row+tile.column).isMultiple(of: 2)  {
 				context.setFillColor(UIColor.black.cgColor)
-
+				
 			} else {
-				context.setFillColor(UIColor.gray.cgColor)
+				context.setFillColor(UIColor.white.cgColor)
 			}
 			
 			context.fill(rectForTile(tile))
 		}
-	
+		
 		context.setFillColor(UIColor.black.cgColor)
 		
 	}

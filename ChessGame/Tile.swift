@@ -13,4 +13,3 @@ struct Tile: Hashable {
 	var column: Int
 }
 
-
