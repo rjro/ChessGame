@@ -27,8 +27,10 @@ extension Tiler {
 
 	func tileForPoint(_ point: CGPoint) -> Tile {
 		//subtract one to become zero-indexed
-		let tileColumn = Int(ceil(point.x/tileSize) - 1)
-		let tileRow = Int(ceil(point.y/tileSize) - 1)
+		let tileColumn = Int(floor(point.x/tileSize))
+		let tileRow = Int(floor(point.y/tileSize))
+		
+		print(tileRow, tileColumn, tileSize)
 		
 		return Tile(row: tileRow, column: tileColumn)
 	}

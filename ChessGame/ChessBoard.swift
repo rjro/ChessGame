@@ -11,7 +11,7 @@ import UIKit
 
 
 
-class ChessBoardView: UIView, Tiler {
+class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	
 	
 	let board = Board(size: (8,8))
@@ -32,6 +32,7 @@ class ChessBoardView: UIView, Tiler {
 	}
 	
 	
+
 	private func commonInit() {
 
 				
@@ -44,10 +45,15 @@ class ChessBoardView: UIView, Tiler {
 			let pieceView = UIView(frame: rectForTile(tile))
 			//pieceView.alpha = 0.3
 			pieceView.backgroundColor = .red
-			pieceView.layer.cornerRadius = 30.0
+			pieceView.layer.cornerRadius = 40.0
 			pieceView.layer.zPosition = 2
 			pieceView.center = centerForTile(tile)
-			pieceView.addGestureRecognizer(UIPanGestureRecognizer(target: self, action: #selector(dragView(sender:))))
+			
+			
+			let gr = UIPanGestureRecognizer(target: self, action: #selector(dragView(sender:)))
+			pieceView.addGestureRecognizer(gr)
+			gr.delegate = self
+			
 
 			addSubview(pieceView)
 		}
@@ -78,43 +84,60 @@ class ChessBoardView: UIView, Tiler {
 	//gotta come up with a better solution than this
 	var dragStartTile: Tile?
 	
+	
+	//have to add this delegate methods cause GR points are off
+	//https://stackoverflow.com/questions/2861400/uipangesturerecognizer-starting-point-is-off
+	func gestureRecognizer(_ gestureRecognizer: UIGestureRecognizer, shouldReceive touch: UITouch) -> Bool {
+		let point = touch.location(in: self)
+		let curTile = tileForPoint(point)
+		dragStartTile = curTile
+		let possibleMoves = board.possibleMoves(tile: curTile)
+		highlightTiles(possibleMoves)
+		return true
+	}
+	
+	override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
+		removeAllHighlights()
+	}
+
+	
 	@objc func dragView(sender: UIPanGestureRecognizer) {
 		let point = sender.location(in: self)
+		let tile = tileForPoint(point)
 		
-		if sender.state == .began {
-			let curTile = tileForPoint(point)
-			dragStartTile = curTile
-			let possibleMoves = board.possibleMoves(tile: curTile)
-			//print("diag:", curTile, possibleMoves, board.state, board.state[curTile.row][curTile.column])
-			highlightTiles(possibleMoves)
-		}
-		
-		
+		print("GESTURE RECOGNIZER FIRED!")
+		print(sender.state.rawValue)
+	
 		guard let pieceView = sender.view else {
 			return
 		}
 		
-
+		if sender.state == .began {
+			
+			
+		}
 		
+
 		if sender.state == .ended {
 			removeAllHighlights()
-			
 			
 			let newTile = tileForPoint(point)
 			
 			if board.isValidMove(oldTile: dragStartTile!, newTile: newTile) {
 				pieceView.center = centerForTile(newTile)
 				board.movePiece(oldTile: dragStartTile!, newTile: newTile)
+				print("MOVED FROM:", dragStartTile!, "TO:", newTile)
 			} else {
+				print("how to return to original location??")
 				pieceView.center = centerForTile(dragStartTile!)
 			}
 			
-
+			dragStartTile = nil
+			
 			return
 
 		}
 
-		
 
 		pieceView.center = point
 		

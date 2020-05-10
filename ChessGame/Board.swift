@@ -38,15 +38,12 @@ class Board {
 		
 		for (row, rowPieces) in state.enumerated() {
 			for (column, piece) in rowPieces.enumerated() {
-				print("PIECE EXISTED:", piece, row, column)
 				if let piece = piece {
 					piecesAndLocations.append((piece, Tile(row: row, column: column)))
 				}
 			}
 		}
-		
-		print(piecesAndLocations)
-		
+				
 		return piecesAndLocations
 		
 	}
@@ -80,7 +77,10 @@ class Board {
 	}
 	
 	private func tileOccupied(_ tile: Tile) -> Bool {
-		nil != state[tile.row][tile.column]
+		guard tileExists(tile) else {
+			return false
+		}
+		return nil != state[tile.row][tile.column]
 	}
 	
 	func bishopMoves(tile: Tile) -> [Tile] {
@@ -88,10 +88,11 @@ class Board {
 		
 		var moverTile = tile
 
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while tileExists(moverTile) {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column += 1
+			if tileOccupied(moverTile) { break }
 		}
 		moverTile = tile
 		
@@ -99,6 +100,8 @@ class Board {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column -= 1
+			if tileOccupied(moverTile) { break }
+
 		}
 		
 		moverTile = tile
@@ -107,6 +110,8 @@ class Board {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column += 1
+			if tileOccupied(moverTile) { break }
+
 		}
 		
 		moverTile = tile
@@ -115,6 +120,8 @@ class Board {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column -= 1
+			if tileOccupied(moverTile) { break }
+
 		}
 		
 		
@@ -122,7 +129,6 @@ class Board {
 	}
 	
 	func pawnMoves(tile: Tile) -> [Tile] {
-		print("CALLED!")
 		return [
 				(-1, 0),
 				(-2, 0),
