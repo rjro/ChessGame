@@ -105,7 +105,6 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		let point = sender.location(in: self)
 		let tile = tileForPoint(point)
 		
-		print("GESTURE RECOGNIZER FIRED!")
 		print(sender.state.rawValue)
 	
 		guard let pieceView = sender.view else {
