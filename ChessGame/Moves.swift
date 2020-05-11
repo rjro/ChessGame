@@ -11,6 +11,16 @@ import Foundation
 
 extension Board {
 	
+	var moveMap: [Chess.Rank: (Tile) -> [Tile] ] {
+		[
+			.pawn: pawnMoves,
+			.bishop: bishopMoves,
+			.rook :rookMoves,
+			.knight: knightMoves,
+			.queen: queenMoves,
+			.king: kingMoves,
+		]
+	}
 
 	func queenMoves(tile: Tile) -> [Tile] {
 		Array(Set(rookMoves(tile: tile) + bishopMoves(tile: tile)))
@@ -160,7 +170,5 @@ extension Board {
 		
 		return moves
 	}
-	
-	
 	
 }

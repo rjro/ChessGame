@@ -25,33 +25,7 @@ typealias BoardSize = (rows: Int, columns: Int)
 
 class Board {
 	
-	var moveMap: [Chess.Rank: (Tile)->[Tile]] {
-		[
-			.pawn: pawnMoves,
-			.bishop: bishopMoves,
-			.rook :rookMoves,
-			.knight: knightMoves,
-			.queen: queenMoves,
-			.king: kingMoves,
-		]
-	}
-	
 	let size: BoardSize
-	
-	//maps the columns of the start row
-	//which are rows 8 and 1 for opponent/player
-	static let startRow: [Int: Chess.Rank] = [
-		0: .rook,
-		7: .rook,
-		1: .knight,
-		6: .knight,
-		2: .bishop,
-		5: .bishop,
-		3: .queen,
-		4: .knight,
-	]
-	
-	
 	
 	var state: [[Piece?]]
 	
@@ -82,7 +56,6 @@ class Board {
 	
 	
 	func possibleMoves(tile: Tile) -> [Tile] {
-		
 		guard tile.row < size.rows && tile.column < size.columns && tile.row >= 0 && tile.column >= 0 else {
 			return [Tile]()
 		}
@@ -91,27 +64,22 @@ class Board {
 			return [Tile]()
 		}
 		
-		return moveMap[piece.rank]!(tile)
-		
+		//figure out a way so the dictionary for the enum isn't an optional
+		return moveMap[piece.rank]?(tile) ?? [Tile]()
 	}
 	
 	func tileExists(_ tile: Tile) -> Bool {
 		tile.row >= 0 && tile.column >= 0 && tile.row < size.rows && tile.column < size.columns
 	}
-	
 	func tileOccupied(_ tile: Tile) -> Bool {
-		guard tileExists(tile) else {
-			return false
-		}
-		return nil != state[tile.row][tile.column]
+		tileExists(tile) && nil != state[tile.row][tile.column]
 	}
-	
-	
+
 	func movePiece(oldTile: Tile, newTile: Tile) {
 		let piece = state[oldTile.row][oldTile.column]
 		state[oldTile.row][oldTile.column] = nil
 		state[newTile.row][newTile.column] = piece
-		print(state[oldTile.row][oldTile.column])
+		print(state[oldTile.row][oldTile.column] ?? "piece now empty")
 	}
 	
 	func printBoard() {
@@ -120,7 +88,7 @@ class Board {
 			var rowString = ""
 			
 			for row in column {
-				if let piece = row {
+				if nil != row {
 					rowString += "X,"
 				} else {
 					rowString += "0,"
@@ -131,31 +99,6 @@ class Board {
 		}
 		
 		print(boardString)
-		
-	}
-	
-	func homeSetup(color: Chess.Color) {
-		//populate pawn row
-		for column in 0 ..< size.columns {
-			state[6][column] = Piece(rank: .pawn, color: color, owner: .player)
-		}
-		
-		Chess.startRow.forEach { column, rank in
-			state[7][column] = Piece(rank: rank, color: color, owner: .player)
-		}
-		
-	}
-	
-	func opponentSetup(color: Chess.Color) {
-		
-		for column in 0 ..< size.columns {
-			state[1][column] = Piece(rank: .pawn, color: color, owner: .opponent)
-		}
-		
-		
-		Chess.startRow.forEach { column, rank in
-			state[0][column] = Piece(rank: rank, color: color, owner: .opponent)
-		}
 		
 	}
 	

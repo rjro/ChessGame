@@ -16,7 +16,6 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	
 	let board = Board(size: (8,8))
 	
-	
 	let tileAmount = 8
 	
 	var tileHighlighters = [UIView]()
@@ -28,8 +27,8 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		state = [[UIView?]](repeating: [UIView?](repeating: nil, count: board.size.columns), count: board.size.rows)
 
 		
-		board.homeSetup(color: .black)
-		board.opponentSetup(color: .white)
+		Chess.setupBoard(board: self.board)
+		
 		for (piece, tile) in board.occupations() {
 			let pieceView = UIView(frame: rectForTile(tile))
 					
