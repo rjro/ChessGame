@@ -24,6 +24,18 @@ struct Piece {
 typealias BoardSize = (rows: Int, columns: Int)
 
 class Board {
+	
+	var moveMap: [Chess.Rank: (Tile)->[Tile]] {
+		[
+			.pawn: pawnMoves,
+			.bishop: bishopMoves,
+			.rook :rookMoves,
+			.knight: knightMoves,
+			.queen: queenMoves,
+			.king: kingMoves,
+		]
+	}
+	
 	let size: BoardSize
 	
 	//maps the columns of the start row
@@ -79,169 +91,21 @@ class Board {
 			return [Tile]()
 		}
 		
-		
-		switch piece.rank {
-		case .bishop: return bishopMoves(tile: tile)
-			
-		case .pawn: return pawnMoves(tile: tile)
-		case .knight: return knightMoves(tile: tile)
-		case .rook: return rookMoves(tile: tile)
-		default: return [Tile]()
-		}
+		return moveMap[piece.rank]!(tile)
 		
 	}
 	
-	private func tileExists(_ tile: Tile) -> Bool {
+	func tileExists(_ tile: Tile) -> Bool {
 		tile.row >= 0 && tile.column >= 0 && tile.row < size.rows && tile.column < size.columns
 	}
 	
-	private func tileOccupied(_ tile: Tile) -> Bool {
+	func tileOccupied(_ tile: Tile) -> Bool {
 		guard tileExists(tile) else {
 			return false
 		}
 		return nil != state[tile.row][tile.column]
 	}
 	
-	func knightMoves(tile: Tile) -> [Tile] {
-		print("CALLED!")
-		var moves = [Tile]()
-		
-		let deltas: [(Int, Int)] = [
-			(-2,-1),
-			(-1,-2),
-			
-			(-2,1),
-			(-1,2),
-			
-			(2,1),
-			(1,2),
-			
-			(2,-1),
-			(1,-2),
-			
-		]
-		
-		for (dr, dc) in deltas {
-			let newTile = Tile(row: tile.row+dr, column: tile.column+dc)
-			if tileExists(newTile) && !tileOccupied(newTile) {
-				moves.append(newTile)
-			}
-		}
-		
-		
-		return moves
-		
-	}
-	
-	func bishopMoves(tile: Tile) -> [Tile] {
-		var moves = [Tile]()
-		
-		var moverTile = Tile(row: tile.row+1, column: tile.column+1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row += 1
-			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
-		}
-		
-		moverTile = Tile(row: tile.row-1, column: tile.column-1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row -= 1
-			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
-			
-		}
-		
-		moverTile = Tile(row: tile.row-1, column: tile.column+1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row -= 1
-			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
-			
-		}
-		
-		moverTile = Tile(row: tile.row+1, column: tile.column-1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row += 1
-			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
-			
-		}
-		
-		
-		return moves
-	}
-	
-	func pawnMoves(tile: Tile) -> [Tile] {
-		
-		var moves = [Tile]()
-		
-		guard let currentPiece = state[tile.row][tile.column],
-			let owner = currentPiece.owner,
-			currentPiece.rank == .pawn else {
-				return moves
-		}
-		
-		if owner == .player {
-			let up = Tile(row: tile.row-1, column: tile.column)
-			let twoUp = Tile(row: tile.row-2, column: tile.column)
-			if tileExists(up) && !tileOccupied(up) { moves.append(up) }
-			if tileExists(twoUp) && !tileOccupied(twoUp) { moves.append(twoUp) }
-		} else {
-			let down = Tile(row: tile.row+1, column: tile.column)
-			let twoDown = Tile(row: tile.row+2, column: tile.column)
-			if tileExists(down) && !tileOccupied(down) { moves.append(down) }
-			if tileExists(twoDown) && !tileOccupied(twoDown) { moves.append(twoDown) }
-		}
-		
-		return moves
-	}
-	
-	func rookMoves(tile: Tile) -> [Tile] {
-		var moves = [Tile]()
-		
-		var moverTile = Tile(row: tile.row-1, column: tile.column)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row -= 1
-			if tileOccupied(moverTile) { break }
-		}
-		
-		moverTile = Tile(row: tile.row+1, column: tile.column)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.row += 1
-			if tileOccupied(moverTile) { break }
-		}
-		
-		
-		moverTile = Tile(row: tile.row, column: tile.column+1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
-		}
-		
-		moverTile = Tile(row: tile.row, column: tile.column-1)
-		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
-			moves.append(moverTile)
-			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
-		}
-		
-		return moves
-	}
 	
 	func movePiece(oldTile: Tile, newTile: Tile) {
 		let piece = state[oldTile.row][oldTile.column]

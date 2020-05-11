@@ -18,7 +18,7 @@ enum Chess {
 		2: .bishop,
 		5: .bishop,
 		3: .queen,
-		4: .knight,
+		4: .king,
 	]
 
 	enum Owner {
