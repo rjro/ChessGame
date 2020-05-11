@@ -10,8 +10,6 @@ import Foundation
 import UIKit
 
 
-
-
 class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	
 	let board = Board(size: (8,8))

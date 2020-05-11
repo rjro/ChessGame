@@ -46,4 +46,12 @@ enum Chess {
 		
 	}
 	
+	//Need to know the state of the board in order to be able to determine
+	//what moves are possible!
+	static func possibleMoves(board: Board, tile: Tile) -> [Tile] {
+		return [Tile]()
+	}
+	
 }
+
+

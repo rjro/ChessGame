@@ -27,11 +27,30 @@ extension Board {
 	}
 	
 	func kingMoves(tile: Tile) -> [Tile] {
-		return [Tile]()
+		var moves = [Tile]()
+
+		let deltas: [(Int, Int)] = [
+			(-1, -1),
+			(+1, +1),
+			(-1, 0),
+			(+1, 0),
+			(0, -1),
+			(0, +1),
+			(-1, +1),
+			(+1, -1),
+		]
+		
+		for (dr, dc) in deltas {
+			let newTile = Tile(row: tile.row+dr, column: tile.column+dc)
+			if tileExists(newTile) && !tileOccupied(newTile) {
+				moves.append(newTile)
+			}
+		}
+		
+		return moves
 	}
 	
 	func knightMoves(tile: Tile) -> [Tile] {
-		print("CALLED!")
 		var moves = [Tile]()
 		
 		let deltas: [(Int, Int)] = [
