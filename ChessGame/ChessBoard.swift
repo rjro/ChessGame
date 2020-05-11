@@ -106,30 +106,33 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			
 			let newTile = tileForPoint(point)
 			
+			var pieceDestination: CGPoint!
+		
 			if board.isValidMove(oldTile: dragStartTile!, newTile: newTile) {
-				pieceView.center = centerForTile(newTile)
+				pieceDestination = centerForTile(newTile)
 				board.movePiece(oldTile: dragStartTile!, newTile: newTile)
 				print("MOVED FROM:", dragStartTile!, "TO:", newTile)
 			} else {
 				print("how to return to original location??")
-				pieceView.center = centerForTile(dragStartTile!)
+				pieceDestination = centerForTile(dragStartTile!)
 			}
-			
+						
+			UIView.animate(withDuration: 0.1, animations: {
+				pieceView.center = pieceDestination
+			}) { _ in
+				SoundPlayer.shared.playBonk()
+
+			}
+				
 			dragStartTile = nil
-			
 			return
-			
 		}
 		
 		pieceView.center = point
 		
 	}
 	
-	func movePiece(oldTile: Tile, newTile: Tile) {
-		
-	}
-	
-	
+
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()

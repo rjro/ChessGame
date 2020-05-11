@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		8F247D9B24689613008A18EB /* PieceImages.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8F247D9A24689613008A18EB /* PieceImages.xcassets */; };
 		8F247D9F2468D0BC008A18EB /* Chess.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F247D9E2468D0BC008A18EB /* Chess.swift */; };
+		8F247DA12468D523008A18EB /* SoundPlayer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F247DA02468D523008A18EB /* SoundPlayer.swift */; };
+		8F247DA32468D67E008A18EB /* bonk.wav in Resources */ = {isa = PBXBuildFile; fileRef = 8F247DA22468D67E008A18EB /* bonk.wav */; };
 		8F61DA822467B8140014910C /* Board.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F61DA812467B8140014910C /* Board.swift */; };
 		8F821A82246732A40018FBBD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A81246732A40018FBBD /* AppDelegate.swift */; };
 		8F821A84246732A40018FBBD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A83246732A40018FBBD /* SceneDelegate.swift */; };
@@ -25,6 +27,8 @@
 /* Begin PBXFileReference section */
 		8F247D9A24689613008A18EB /* PieceImages.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = PieceImages.xcassets; sourceTree = "<group>"; };
 		8F247D9E2468D0BC008A18EB /* Chess.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Chess.swift; sourceTree = "<group>"; };
+		8F247DA02468D523008A18EB /* SoundPlayer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SoundPlayer.swift; sourceTree = "<group>"; };
+		8F247DA22468D67E008A18EB /* bonk.wav */ = {isa = PBXFileReference; lastKnownFileType = audio.wav; path = bonk.wav; sourceTree = "<group>"; };
 		8F61DA812467B8140014910C /* Board.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Board.swift; path = ChessGame/Board.swift; sourceTree = "<group>"; };
 		8F821A7E246732A40018FBBD /* ChessGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChessGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F821A81246732A40018FBBD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -76,10 +80,12 @@
 				8F821A85246732A40018FBBD /* ViewController.swift */,
 				8F821A9D24677F2C0018FBBD /* Tiler.swift */,
 				8F821A95246732CD0018FBBD /* ChessBoard.swift */,
+				8F247DA02468D523008A18EB /* SoundPlayer.swift */,
 				8F247D9E2468D0BC008A18EB /* Chess.swift */,
 				8F821A99246773800018FBBD /* Extensions.swift */,
 				8F821A9B246776AD0018FBBD /* Tile.swift */,
 				8F821A87246732A40018FBBD /* Main.storyboard */,
+				8F247DA22468D67E008A18EB /* bonk.wav */,
 				8F821A8A246732A50018FBBD /* Assets.xcassets */,
 				8F247D9A24689613008A18EB /* PieceImages.xcassets */,
 				8F821A8C246732A50018FBBD /* LaunchScreen.storyboard */,
@@ -146,6 +152,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F247DA32468D67E008A18EB /* bonk.wav in Resources */,
 				8F247D9B24689613008A18EB /* PieceImages.xcassets in Resources */,
 				8F821A8E246732A50018FBBD /* LaunchScreen.storyboard in Resources */,
 				8F821A8B246732A50018FBBD /* Assets.xcassets in Resources */,
@@ -160,6 +167,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8F247DA12468D523008A18EB /* SoundPlayer.swift in Sources */,
 				8F247D9F2468D0BC008A18EB /* Chess.swift in Sources */,
 				8F821A86246732A40018FBBD /* ViewController.swift in Sources */,
 				8F821A9A246773800018FBBD /* Extensions.swift in Sources */,
