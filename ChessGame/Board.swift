@@ -8,22 +8,38 @@
 
 import Foundation
 
-
 struct Piece {
-	let rank: ChessRank
-	let owner = 0
+	let rank: Chess.Rank
+	let color: Chess.Color
+	var owner: Chess.Owner?
+	
+	init(rank: Chess.Rank, color: Chess.Color, owner: Chess.Owner? = nil) {
+		self.rank = rank
+		self.color = color
+		self.owner = owner
+	}
+	
 }
-
-
-enum ChessRank {
-	case pawn, knight, rook, bishop, queen, king
-}
-
 
 typealias BoardSize = (rows: Int, columns: Int)
 
 class Board {
 	let size: BoardSize
+	
+	//maps the columns of the start row
+	//which are rows 8 and 1 for opponent/player
+	static let startRow: [Int: Chess.Rank] = [
+		0: .rook,
+		7: .rook,
+		1: .knight,
+		6: .knight,
+		2: .bishop,
+		5: .bishop,
+		3: .queen,
+		4: .knight,
+	]
+
+	
 	
 	var state: [[Piece?]]
 	
@@ -69,6 +85,7 @@ class Board {
 			
 		case .pawn: return pawnMoves(tile: tile)
 		case .knight: return knightMoves(tile: tile)
+		case .rook: return rookMoves(tile: tile)
 		default: return [Tile]()
 		}
 		
@@ -119,17 +136,18 @@ class Board {
 	func bishopMoves(tile: Tile) -> [Tile] {
 		var moves = [Tile]()
 		
-		var moverTile = tile
+		var moverTile = Tile(row: tile.row+1, column: tile.column+1)
 		
-		while tileExists(moverTile) {
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column += 1
 			if tileOccupied(moverTile) { break }
 		}
-		moverTile = tile
 		
-		while tileExists(moverTile) {
+		moverTile = Tile(row: tile.row-1, column: tile.column-1)
+		
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column -= 1
@@ -137,9 +155,9 @@ class Board {
 			
 		}
 		
-		moverTile = tile
+		moverTile = Tile(row: tile.row-1, column: tile.column+1)
 		
-		while tileExists(moverTile) {
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column += 1
@@ -147,9 +165,9 @@ class Board {
 			
 		}
 		
-		moverTile = tile
+		moverTile = Tile(row: tile.row+1, column: tile.column-1)
 		
-		while tileExists(moverTile) {
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column -= 1
@@ -162,14 +180,55 @@ class Board {
 	}
 	
 	func pawnMoves(tile: Tile) -> [Tile] {
-		return [
-			(-1, 0),
-			(-2, 0),
-			//	(-1, -1),
-			//		(-1, +1),
-			].map { (dr, dc) in
-				Tile(row: tile.row+dr, column: tile.column+dc)
+		
+		var moves = [Tile]()
+		
+		let up = Tile(row: tile.row-1, column: tile.column)
+		let twoUp = Tile(row: tile.row-2, column: tile.column)
+		if tileExists(up) && !tileOccupied(up) { moves.append(up) }
+		if tileExists(twoUp) && !tileOccupied(twoUp) { moves.append(twoUp) }
+		
+		
+		return moves
+	}
+	
+	func rookMoves(tile: Tile) -> [Tile] {
+		var moves = [Tile]()
+		
+		var moverTile = Tile(row: tile.row-1, column: tile.column)
+
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
+			moves.append(moverTile)
+			moverTile.row -= 1
+			if tileOccupied(moverTile) { break }
 		}
+		
+		moverTile = Tile(row: tile.row+1, column: tile.column)
+
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
+			moves.append(moverTile)
+			moverTile.row += 1
+			if tileOccupied(moverTile) { break }
+		}
+		
+		
+		moverTile = Tile(row: tile.row, column: tile.column+1)
+
+		while tileExists(moverTile) && !tileOccupied(moverTile) {
+			moves.append(moverTile)
+			moverTile.column += 1
+			if tileOccupied(moverTile) { break }
+		}
+		
+		moverTile = Tile(row: tile.row, column: tile.column-1)
+
+			while tileExists(moverTile) && !tileOccupied(moverTile) {
+				moves.append(moverTile)
+				moverTile.column -= 1
+				if tileOccupied(moverTile) { break }
+			}
+		
+		return moves
 	}
 	
 	func movePiece(oldTile: Tile, newTile: Tile) {
@@ -179,9 +238,7 @@ class Board {
 		print(state[oldTile.row][oldTile.column])
 	}
 	
-	
 	func printBoard() {
-		
 		var boardString = ""
 		for column in state {
 			var rowString = ""
@@ -201,24 +258,29 @@ class Board {
 		
 	}
 	
-	func homeSetup() {
+	func homeSetup(color: Chess.Color) {
 		//populate pawn row
 		for column in 0 ..< size.columns {
-			state[6][column] = Piece(rank: .pawn)
+			state[6][column] = Piece(rank: .pawn, color: color, owner: .player)
 		}
 		
-		state[7][0] = Piece(rank: .rook)
-		state[7][7] = Piece(rank: .rook)
-		
-		state[7][1] = Piece(rank: .knight)
-		state[7][6] = Piece(rank: .knight)
-		
-		state[7][2] = Piece(rank: .bishop)
-		state[7][5] = Piece(rank: .bishop)
-		
-		state[7][3] = Piece(rank: .king)
-		state[7][4] = Piece(rank: .queen)
+		Chess.startRow.forEach { column, rank in
+			state[7][column] = Piece(rank: rank, color: color, owner: .player)
+		}
 
+	}
+	
+	func opponentSetup(color: Chess.Color) {
+		
+		for column in 0 ..< size.columns {
+			state[1][column] = Piece(rank: .pawn, color: color, owner: .opponent)
+		}
+		
+
+		Chess.startRow.forEach { column, rank in
+			state[0][column] = Piece(rank: rank, color: color, owner: .opponent)
+		}
+		
 	}
 		
 }
