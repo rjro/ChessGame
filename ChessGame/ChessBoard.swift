@@ -59,8 +59,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			let tileView = UIView(frame: rect)
 			
 		
-			
-			tileView.backgroundColor = .orange
+			tileView.backgroundColor = UIColor(red: 205/255, green: 210/255, blue: 106/255, alpha: 1)
 			tileView.layer.zPosition = 1
 			tileHighlighters.append(tileView)
 			addSubview(tileView)
@@ -149,13 +148,17 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			return
 		}
 		
+		let evenColor = UIColor(red: 240/255, green: 217/255, blue: 181/255, alpha: 1).cgColor
+		let oddColor = UIColor(red: 181/255, green: 136/255, blue: 99/255, alpha: 1).cgColor
+		
 		for tile in tiles {
 			if (tile.row+tile.column).isMultiple(of: 2)  {
-				context.setFillColor(UIColor.gray.cgColor)
+				context.setFillColor(evenColor)
 				
 			} else {
-				context.setFillColor(UIColor.white.cgColor)
+				context.setFillColor(oddColor)
 			}
+			
 			
 			context.fill(rectForTile(tile))
 		}
