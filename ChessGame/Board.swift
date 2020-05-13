@@ -57,6 +57,7 @@ class Board {
 	func isValidMove(oldTile: Tile, newTile: Tile) -> (validMove: Bool, capture: Bool) {
 		let validMove = possibleMoves(tile: oldTile).contains(newTile)
 		let capture = validMove ? isCapture(oldTile: oldTile, newTile: newTile) : false
+		print("WAS VALID MOVE? WAS CAPTURE", validMove, capture)
 		return (validMove, capture)
 	}
 	

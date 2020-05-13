@@ -184,7 +184,9 @@ extension Board {
 			if tileOccupied(moverTile)  {
 				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
+	
 			}
+			
 			moves.append(moverTile)
 			moverTile.row -= 1
 		}
@@ -200,10 +202,13 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row, column: tile.column+1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while tileExists(moverTile) {
+			if tileOccupied(moverTile)  {
+				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+				break
+			}
 			moves.append(moverTile)
 			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
 		}
 		
 		moverTile = Tile(row: tile.row, column: tile.column-1)

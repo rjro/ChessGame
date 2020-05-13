@@ -70,7 +70,8 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	}
 	
 	func capturePiece(tile: Tile) {
-		
+		print("CAPTURING PIECE:", tile)
+		print(state[tile.row][tile.column])
 		state[tile.row][tile.column]?.removeFromSuperview()
 		
 	}
@@ -138,11 +139,16 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			
 	
 			if validMove {
-				
+				print("DID I GET A CAPTURE?!?!?!?!", capture)
 				if capture { self.capturePiece(tile: newTile) }
 				
 				pieceDestination = centerForTile(newTile)
 				board.movePiece(oldTile: dragStartTile!, newTile: newTile)
+				
+				let originalPiece = state[dragStartTile!.row][dragStartTile!.column]
+				state[dragStartTile!.row][dragStartTile!.column] = nil
+				state[newTile.row][newTile.column] = originalPiece
+				
 				print("MOVED FROM:", dragStartTile!, "TO:", newTile)
 			} else {
 				print("how to return to original location??")
