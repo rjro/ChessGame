@@ -49,10 +49,10 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		}
 		
 		
-		
+		/*
 		DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
 			self.capturePiece(tile: Tile(row: 0, column: 0))
-		}
+		}*/
 		
 		
 	}
@@ -82,8 +82,8 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			let rect = rectForTile(tile)
 			let tileView = UIView(frame: rect)
 			
-		
 			tileView.backgroundColor = UIColor(red: 205/255, green: 210/255, blue: 106/255, alpha: 1)
+			
 			tileView.layer.zPosition = 1
 			tileHighlighters.append(tileView)
 			addSubview(tileView)
@@ -130,8 +130,17 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			let newTile = tileForPoint(point)
 			
 			var pieceDestination: CGPoint!
-		
-			if board.isValidMove(oldTile: dragStartTile!, newTile: newTile) {
+			
+			//return valid, invalid, capture
+			//if capture, we have to fade out the piece!!!
+			
+			let (validMove, capture) = board.isValidMove(oldTile: dragStartTile!, newTile: newTile)
+			
+	
+			if validMove {
+				
+				if capture { self.capturePiece(tile: newTile) }
+				
 				pieceDestination = centerForTile(newTile)
 				board.movePiece(oldTile: dragStartTile!, newTile: newTile)
 				print("MOVED FROM:", dragStartTile!, "TO:", newTile)

@@ -26,14 +26,14 @@ extension Board {
 			.king: kingMoves,
 		]
 	}
-
+	
 	func queenMoves(tile: Tile) -> [Tile] {
 		Array(Set(rookMoves(tile: tile) + bishopMoves(tile: tile)))
 	}
 	
 	func kingMoves(tile: Tile) -> [Tile] {
 		var moves = [Tile]()
-
+		
 		let deltas: [(Int, Int)] = [
 			(-1, -1),
 			(+1, +1),
@@ -144,14 +144,33 @@ extension Board {
 		if owner == .player {
 			let up = Tile(row: tile.row-1, column: tile.column)
 			let twoUp = Tile(row: tile.row-2, column: tile.column)
-			if tileExists(up) && !tileOccupied(up) { moves.append(up) }
+			if tileExists(up) { moves.append(up) }
 			if tileExists(twoUp) && !tileOccupied(twoUp) { moves.append(twoUp) }
+			
+			var topLeft = Tile(row: tile.row-1, column: tile.column-1)
+			var topRight = Tile(row: tile.row-1, column: tile.column+1)
+			
+			/*
+			if tileExists(topLeft) && tileOccupied(topLeft) {
+				topLeft.capturable = true
+				moves.append(topLeft)
+			}
+			
+			
+			if tileExists(topRight) && tileOccupied(topRight) {
+				topRight.capturable = true
+				moves.append(topRight)
+			}*/
+			
 		} else {
 			let down = Tile(row: tile.row+1, column: tile.column)
 			let twoDown = Tile(row: tile.row+2, column: tile.column)
 			if tileExists(down) && !tileOccupied(down) { moves.append(down) }
 			if tileExists(twoDown) && !tileOccupied(twoDown) { moves.append(twoDown) }
 		}
+		
+		
+		
 		
 		return moves
 	}

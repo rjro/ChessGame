@@ -50,8 +50,30 @@ class Board {
 		
 	}
 	
-	func isValidMove(oldTile: Tile, newTile: Tile) -> Bool {
-		return possibleMoves(tile: oldTile).contains(newTile)
+	enum MoveResult {
+		case valid, invalid, capture
+	}
+	
+	func isValidMove(oldTile: Tile, newTile: Tile) -> (validMove: Bool, capture: Bool) {
+		let validMove = possibleMoves(tile: oldTile).contains(newTile)
+		let capture = validMove ? isCapture(oldTile: oldTile, newTile: newTile) : false
+		return (validMove, capture)
+	}
+	
+	func isCapture(oldTile: Tile, newTile: Tile) -> Bool {
+		//TODO: Check capture rules!
+		let occupied = isTileOccupied(newTile)
+		
+		guard occupied else {
+			return false
+		}
+
+		state[newTile.row][newTile.column] = nil
+		return true
+	}
+	
+	func isTileOccupied(_ tile: Tile) -> Bool {
+		nil != state[tile.row][tile.column]
 	}
 	
 	
