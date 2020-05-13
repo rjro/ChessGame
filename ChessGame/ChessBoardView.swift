@@ -17,7 +17,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	let tileAmount = 8
 	
 	var tileHighlighters = [UIView]()
-
+	
 	var state = [[UIView?]]()
 
 	
@@ -25,7 +25,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		state = [[UIView?]](repeating: [UIView?](repeating: nil, count: board.size.columns), count: board.size.rows)
 
 		
-		Chess.setupBoard(board: self.board)
+		Chess.setupBoard(board)
 		
 		for (piece, tile) in board.occupations() {
 			let pieceView = UIView(frame: rectForTile(tile))
@@ -35,6 +35,9 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			pieceView.addSubview(pieceImageView)
 			
 			pieceView.layer.zPosition = 5
+			
+			state[tile.row][tile.column] = pieceView
+			
 
 		
 			let gr = UIPanGestureRecognizer(target: self, action: #selector(dragView(sender:)))
@@ -45,6 +48,30 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			addSubview(pieceView)
 		}
 		
+		
+		
+		DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+			self.capturePiece(tile: Tile(row: 0, column: 0))
+		}
+		
+		
+	}
+	
+	//should this be called "move view?"
+	//dislike this whole "state" solution but
+	//we need some reference to do animation so
+	//this seems OK for now
+	func movePiece(oldTile: Tile, newTile: Tile) {
+		
+		UIView.animate(withDuration: 0.3) {
+			self.state[oldTile.row][oldTile.column]!.center = self.state[newTile.row][newTile.column]!.center
+		}
+		
+	}
+	
+	func capturePiece(tile: Tile) {
+		
+		state[tile.row][tile.column]?.removeFromSuperview()
 		
 	}
 	

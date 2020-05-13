@@ -9,6 +9,11 @@
 import Foundation
 
 
+
+//possibleMoves needs to include pawns ability to En passant
+
+//movePiece(oldTile: Tile, newTile: Tile) -> Captured: Bool
+
 extension Board {
 	
 	var moveMap: [Chess.Rank: (Tile) -> [Tile] ] {

@@ -33,7 +33,7 @@ enum Chess {
 		case pawn, knight, rook, bishop, queen, king
 	}
 	
-	static func setupBoard(board: Board) {
+	static func setupBoard(_ board: Board) {
 		for column in 0 ..< board.size.columns {
 			board.state[6][column] = Piece(rank: .pawn, color: .black, owner: .player)
 			board.state[1][column] = Piece(rank: .pawn, color: .white, owner: .opponent)

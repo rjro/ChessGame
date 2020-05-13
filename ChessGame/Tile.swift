@@ -13,3 +13,7 @@ struct Tile: Hashable {
 	var column: Int
 }
 
+struct TileState {
+	let capturablePiece: Bool
+}
+
