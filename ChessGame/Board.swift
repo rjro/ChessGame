@@ -60,6 +60,10 @@ class Board {
 		return (validMove, capture)
 	}
 	
+	func tilesHaveDifferentOwners(tile: Tile, otherTile: Tile) -> Bool {
+		state[tile.row][tile.column]?.owner != state[otherTile.row][otherTile.column]?.owner
+	}
+	
 	func isCapture(oldTile: Tile, newTile: Tile) -> Bool {
 		//TODO: Check capture rules!
 		let occupied = isTileOccupied(newTile)

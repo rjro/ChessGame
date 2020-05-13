@@ -180,10 +180,13 @@ extension Board {
 		
 		var moverTile = Tile(row: tile.row-1, column: tile.column)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while tileExists(moverTile) {
+			if tileOccupied(moverTile)  {
+				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+				break
+			}
 			moves.append(moverTile)
 			moverTile.row -= 1
-			if tileOccupied(moverTile) { break }
 		}
 		
 		moverTile = Tile(row: tile.row+1, column: tile.column)
