@@ -11,5 +11,6 @@ import Foundation
 protocol TileState {
 	func exists(_ tile: Tile) -> Bool
 	func isOccupied(_ tile: Tile) -> Bool
+	func owner(_ tile: Tile) -> Chess.Owner
 	func haveDifferentOwners(_ a: Tile, _ b: Tile) -> Bool
 }

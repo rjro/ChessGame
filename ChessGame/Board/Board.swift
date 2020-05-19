@@ -8,18 +8,6 @@
 
 import Foundation
 
-struct Piece {
-	let rank: Chess.Rank
-	let color: Chess.Color
-	var owner: Chess.Owner?
-	
-	init(rank: Chess.Rank, color: Chess.Color, owner: Chess.Owner? = nil) {
-		self.rank = rank
-		self.color = color
-		self.owner = owner
-	}
-	
-}
 
 typealias BoardSize = (rows: Int, columns: Int)
 
@@ -27,16 +15,16 @@ class Board {
 	
 	let size: BoardSize
 	
-	var state: [[Piece?]]
+	var state: [[Chess.Piece?]]
 	
 	init(size: BoardSize) {
 		self.size = size
-		self.state = [[Piece?]](repeating: [Piece?](repeating: nil, count: size.columns), count: size.rows)
+		self.state = [[Chess.Piece?]](repeating: [Chess.Piece?](repeating: nil, count: size.columns), count: size.rows)
 	}
 	
-	func occupations() -> [(Piece, Tile)] {
+	func occupations() -> [(Chess.Piece, Tile)] {
 		
-		var piecesAndLocations = [(Piece, Tile)]()
+		var piecesAndLocations = [(Chess.Piece, Tile)]()
 		
 		for (row, rowPieces) in state.enumerated() {
 			for (column, piece) in rowPieces.enumerated() {
@@ -49,10 +37,7 @@ class Board {
 		return piecesAndLocations
 		
 	}
-	
-	enum MoveResult {
-		case valid, invalid, capture
-	}
+
 	
 	func isValidMove(oldTile: Tile, newTile: Tile) -> (validMove: Bool, capture: Bool) {
 		let validMove = possibleMoves(tile: oldTile).contains(newTile)
@@ -136,6 +121,10 @@ extension Board: TileState {
 	
 	func haveDifferentOwners(_ tile: Tile, _ otherTile: Tile) -> Bool {
 		state[tile.row][tile.column]?.owner != state[otherTile.row][otherTile.column]?.owner
+	}
+	
+	func owner(_ tile: Tile) -> Chess.Owner {
+		return state[tile.row][tile.column]!.owner!
 	}
 	
 }

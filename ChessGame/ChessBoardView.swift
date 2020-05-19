@@ -19,7 +19,6 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	var tileHighlighters = [UIView]()
 	
 	var state = [[UIView?]]()
-
 	
 	private func commonInit() {
 		state = [[UIView?]](repeating: [UIView?](repeating: nil, count: board.size.columns), count: board.size.rows)
@@ -37,8 +36,6 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			pieceView.layer.zPosition = 5
 			
 			state[tile.row][tile.column] = pieceView
-			
-
 		
 			let gr = UIPanGestureRecognizer(target: self, action: #selector(dragView(sender:)))
 			pieceView.addGestureRecognizer(gr)

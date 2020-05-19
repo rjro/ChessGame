@@ -132,59 +132,7 @@ extension Board {
 		return moves
 	}
 	
-	func pawnMoves(tile: Tile) -> [Tile] {
-		
-		var moves = [Tile]()
-		
-		guard let currentPiece = state[tile.row][tile.column],
-			let owner = currentPiece.owner,
-			currentPiece.rank == .pawn else {
-				return moves
-		}
-		
-		if owner == .player {
-			let up = Tile(row: tile.row-1, column: tile.column)
-			let twoUp = Tile(row: tile.row-2, column: tile.column)
-			let topLeft = Tile(row: tile.row-1, column: tile.column-1)
-			let topRight = Tile(row: tile.row-1, column: tile.column+1)
-			
-			if exists(up) && !isOccupied(up) { moves.append(up) }
-			if exists(twoUp) && !isOccupied(twoUp) { moves.append(twoUp) }
-			
-			if exists(topLeft) && isOccupied(topLeft) && haveDifferentOwners(tile: tile, otherTile: topLeft) {
-				moves.append(topLeft)
-			}
-			
-			if exists(topRight) && isOccupied(topRight) && haveDifferentOwners(tile: tile, otherTile: topRight) {
-				moves.append(topRight)
-			}
-			
-		} else {
-			let down = Tile(row: tile.row+1, column: tile.column)
-			let twoDown = Tile(row: tile.row+2, column: tile.column)
-			let bottomLeft = Tile(row: tile.row+1, column: tile.column-1)
-			let bottomRight = Tile(row: tile.row+1, column: tile.column+1)
-
-			
-			if exists(down) && !isOccupied(down) { moves.append(down) }
-			if exists(twoDown) && !isOccupied(twoDown) { moves.append(twoDown) }
-		
-			
-			if exists(bottomLeft) && isOccupied(bottomLeft) && haveDifferentOwners(tile: tile, otherTile: bottomLeft) {
-				moves.append(bottomLeft)
-			}
-			
-			if exists(bottomRight) && isOccupied(bottomRight) && haveDifferentOwners(tile: tile, otherTile: bottomRight) {
-				moves.append(bottomRight)
-			}
-		
-		}
-		
-		
-		
-		
-		return moves
-	}
+	func pawnMoves(tile: Tile) -> [Tile] { Chess.Moves.pawn(tile: tile, state: self) }
 	
 	
 	//maybe convert this to BFS???

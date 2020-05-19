@@ -10,6 +10,8 @@ import Foundation
 
 enum Chess {
 	
+	static let dimensions = (rows: 8, columns: 8)
+	
 	static let startRow: [Int: Chess.Rank] = [
 		0: .rook,
 		7: .rook,
@@ -20,6 +22,12 @@ enum Chess {
 		3: .queen,
 		4: .king,
 	]
+	
+	
+	enum pawnRow {
+		static let player = 6
+		static let opponent = 1
+	}
 	
 	enum Owner {
 		case player, opponent
@@ -48,8 +56,12 @@ enum Chess {
 	
 	//Need to know the state of the board in order to be able to determine
 	//what moves are possible!
-	static func possibleMoves(board: Board, tile: Tile) -> [Tile] {
+	static func possibleMoves(board: TileState, tile: Tile) -> [Tile] {
+		
 		return [Tile]()
+		
+		
+		
 	}
 	
 }
