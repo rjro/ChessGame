@@ -14,6 +14,7 @@ import Foundation
 
 //movePiece(oldTile: Tile, newTile: Tile) -> Captured: Bool
 
+
 extension Board {
 	
 	var moveMap: [Chess.Rank: (Tile) -> [Tile] ] {
@@ -47,7 +48,7 @@ extension Board {
 		
 		for (dr, dc) in deltas {
 			let newTile = Tile(row: tile.row+dr, column: tile.column+dc)
-			if tileExists(newTile) && !tileOccupied(newTile) {
+			if exists(newTile) && !isOccupied(newTile) {
 				moves.append(newTile)
 			}
 		}
@@ -75,7 +76,7 @@ extension Board {
 		
 		for (dr, dc) in deltas {
 			let newTile = Tile(row: tile.row+dr, column: tile.column+dc)
-			if tileExists(newTile) && !tileOccupied(newTile) {
+			if exists(newTile) && !isOccupied(newTile) {
 				moves.append(newTile)
 			}
 		}
@@ -90,40 +91,40 @@ extension Board {
 		
 		var moverTile = Tile(row: tile.row+1, column: tile.column+1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while exists(moverTile) && !isOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
+			if isOccupied(moverTile) { break }
 		}
 		
 		moverTile = Tile(row: tile.row-1, column: tile.column-1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while exists(moverTile) && !isOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
+			if isOccupied(moverTile) { break }
 			
 		}
 		
 		moverTile = Tile(row: tile.row-1, column: tile.column+1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while exists(moverTile) && !isOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row -= 1
 			moverTile.column += 1
-			if tileOccupied(moverTile) { break }
+			if isOccupied(moverTile) { break }
 			
 		}
 		
 		moverTile = Tile(row: tile.row+1, column: tile.column-1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while exists(moverTile) && !isOccupied(moverTile) {
 			moves.append(moverTile)
 			moverTile.row += 1
 			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
+			if isOccupied(moverTile) { break }
 			
 		}
 		
@@ -147,14 +148,14 @@ extension Board {
 			let topLeft = Tile(row: tile.row-1, column: tile.column-1)
 			let topRight = Tile(row: tile.row-1, column: tile.column+1)
 			
-			if tileExists(up) && !tileOccupied(up) { moves.append(up) }
-			if tileExists(twoUp) && !tileOccupied(twoUp) { moves.append(twoUp) }
+			if exists(up) && !isOccupied(up) { moves.append(up) }
+			if exists(twoUp) && !isOccupied(twoUp) { moves.append(twoUp) }
 			
-			if tileExists(topLeft) && tileOccupied(topLeft) && tilesHaveDifferentOwners(tile: tile, otherTile: topLeft) {
+			if exists(topLeft) && isOccupied(topLeft) && haveDifferentOwners(tile: tile, otherTile: topLeft) {
 				moves.append(topLeft)
 			}
 			
-			if tileExists(topRight) && tileOccupied(topRight) && tilesHaveDifferentOwners(tile: tile, otherTile: topRight) {
+			if exists(topRight) && isOccupied(topRight) && haveDifferentOwners(tile: tile, otherTile: topRight) {
 				moves.append(topRight)
 			}
 			
@@ -165,15 +166,15 @@ extension Board {
 			let bottomRight = Tile(row: tile.row+1, column: tile.column+1)
 
 			
-			if tileExists(down) && !tileOccupied(down) { moves.append(down) }
-			if tileExists(twoDown) && !tileOccupied(twoDown) { moves.append(twoDown) }
+			if exists(down) && !isOccupied(down) { moves.append(down) }
+			if exists(twoDown) && !isOccupied(twoDown) { moves.append(twoDown) }
 		
 			
-			if tileExists(bottomLeft) && tileOccupied(bottomLeft) && tilesHaveDifferentOwners(tile: tile, otherTile: bottomLeft) {
+			if exists(bottomLeft) && isOccupied(bottomLeft) && haveDifferentOwners(tile: tile, otherTile: bottomLeft) {
 				moves.append(bottomLeft)
 			}
 			
-			if tileExists(bottomRight) && tileOccupied(bottomRight) && tilesHaveDifferentOwners(tile: tile, otherTile: bottomRight) {
+			if exists(bottomRight) && isOccupied(bottomRight) && haveDifferentOwners(tile: tile, otherTile: bottomRight) {
 				moves.append(bottomRight)
 			}
 		
@@ -192,9 +193,9 @@ extension Board {
 		
 		var moverTile = Tile(row: tile.row-1, column: tile.column)
 		
-		while tileExists(moverTile) {
-			if tileOccupied(moverTile)  {
-				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+		while exists(moverTile) {
+			if isOccupied(moverTile)  {
+				if haveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
 
 			}
@@ -205,9 +206,9 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row+1, column: tile.column)
 		
-		while tileExists(moverTile) {
-			if tileOccupied(moverTile)  {
-				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+		while exists(moverTile) {
+			if isOccupied(moverTile)  {
+				if haveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
 			}
 			moves.append(moverTile)
@@ -216,9 +217,9 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row, column: tile.column+1)
 		
-		while tileExists(moverTile) {
-			if tileOccupied(moverTile)  {
-				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+		while exists(moverTile) {
+			if isOccupied(moverTile)  {
+				if haveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
 			}
 			moves.append(moverTile)
@@ -227,9 +228,9 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row, column: tile.column-1)
 		
-		while tileExists(moverTile) {
-			if tileOccupied(moverTile)  {
-				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+		while exists(moverTile) {
+			if isOccupied(moverTile)  {
+				if haveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
 			}
 			moves.append(moverTile)

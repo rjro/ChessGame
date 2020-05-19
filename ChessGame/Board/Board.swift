@@ -61,7 +61,7 @@ class Board {
 		return (validMove, capture)
 	}
 	
-	func tilesHaveDifferentOwners(tile: Tile, otherTile: Tile) -> Bool {
+	func haveDifferentOwners(tile: Tile, otherTile: Tile) -> Bool {
 		state[tile.row][tile.column]?.owner != state[otherTile.row][otherTile.column]?.owner
 	}
 	
@@ -95,13 +95,6 @@ class Board {
 		return moveMap[piece.rank]?(tile) ?? [Tile]()
 	}
 	
-	func tileExists(_ tile: Tile) -> Bool {
-		tile.row >= 0 && tile.column >= 0 && tile.row < size.rows && tile.column < size.columns
-	}
-	func tileOccupied(_ tile: Tile) -> Bool {
-		tileExists(tile) && nil != state[tile.row][tile.column]
-	}
-
 	func movePiece(oldTile: Tile, newTile: Tile) {
 		let piece = state[oldTile.row][oldTile.column]
 		state[oldTile.row][oldTile.column] = nil
@@ -127,6 +120,22 @@ class Board {
 		
 		print(boardString)
 		
+	}
+	
+}
+
+extension Board: TileState {
+	
+	func exists(_ tile: Tile) -> Bool {
+		tile.row >= 0 && tile.column >= 0 && tile.row < size.rows && tile.column < size.columns
+	}
+	
+	func isOccupied(_ tile: Tile) -> Bool {
+		exists(tile) && nil != state[tile.row][tile.column]
+	}
+	
+	func haveDifferentOwners(_ tile: Tile, _ otherTile: Tile) -> Bool {
+		state[tile.row][tile.column]?.owner != state[otherTile.row][otherTile.column]?.owner
 	}
 	
 }
