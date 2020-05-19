@@ -147,7 +147,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 				
 				let originalPiece = state[dragStartTile!.row][dragStartTile!.column]
 				state[dragStartTile!.row][dragStartTile!.column] = nil
-				state[newTile.row][newTile.column] = originalPiece
+				state[newTile.row][newTile.column] = originalPiece	
 				
 				print("MOVED FROM:", dragStartTile!, "TO:", newTile)
 			} else {

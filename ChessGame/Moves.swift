@@ -144,29 +144,39 @@ extension Board {
 		if owner == .player {
 			let up = Tile(row: tile.row-1, column: tile.column)
 			let twoUp = Tile(row: tile.row-2, column: tile.column)
-			if tileExists(up) { moves.append(up) }
+			let topLeft = Tile(row: tile.row-1, column: tile.column-1)
+			let topRight = Tile(row: tile.row-1, column: tile.column+1)
+			
+			if tileExists(up) && !tileOccupied(up) { moves.append(up) }
 			if tileExists(twoUp) && !tileOccupied(twoUp) { moves.append(twoUp) }
 			
-			var topLeft = Tile(row: tile.row-1, column: tile.column-1)
-			var topRight = Tile(row: tile.row-1, column: tile.column+1)
-			
-			/*
-			if tileExists(topLeft) && tileOccupied(topLeft) {
-				topLeft.capturable = true
+			if tileExists(topLeft) && tileOccupied(topLeft) && tilesHaveDifferentOwners(tile: tile, otherTile: topLeft) {
 				moves.append(topLeft)
 			}
 			
-			
-			if tileExists(topRight) && tileOccupied(topRight) {
-				topRight.capturable = true
+			if tileExists(topRight) && tileOccupied(topRight) && tilesHaveDifferentOwners(tile: tile, otherTile: topRight) {
 				moves.append(topRight)
-			}*/
+			}
 			
 		} else {
 			let down = Tile(row: tile.row+1, column: tile.column)
 			let twoDown = Tile(row: tile.row+2, column: tile.column)
+			let bottomLeft = Tile(row: tile.row+1, column: tile.column-1)
+			let bottomRight = Tile(row: tile.row+1, column: tile.column+1)
+
+			
 			if tileExists(down) && !tileOccupied(down) { moves.append(down) }
 			if tileExists(twoDown) && !tileOccupied(twoDown) { moves.append(twoDown) }
+		
+			
+			if tileExists(bottomLeft) && tileOccupied(bottomLeft) && tilesHaveDifferentOwners(tile: tile, otherTile: bottomLeft) {
+				moves.append(bottomLeft)
+			}
+			
+			if tileExists(bottomRight) && tileOccupied(bottomRight) && tilesHaveDifferentOwners(tile: tile, otherTile: bottomRight) {
+				moves.append(bottomRight)
+			}
+		
 		}
 		
 		
@@ -175,6 +185,8 @@ extension Board {
 		return moves
 	}
 	
+	
+	//maybe convert this to BFS???
 	func rookMoves(tile: Tile) -> [Tile] {
 		var moves = [Tile]()
 		
@@ -184,7 +196,7 @@ extension Board {
 			if tileOccupied(moverTile)  {
 				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
 				break
-	
+
 			}
 			
 			moves.append(moverTile)
@@ -193,12 +205,14 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row+1, column: tile.column)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while tileExists(moverTile) {
+			if tileOccupied(moverTile)  {
+				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+				break
+			}
 			moves.append(moverTile)
 			moverTile.row += 1
-			if tileOccupied(moverTile) { break }
 		}
-		
 		
 		moverTile = Tile(row: tile.row, column: tile.column+1)
 		
@@ -213,10 +227,13 @@ extension Board {
 		
 		moverTile = Tile(row: tile.row, column: tile.column-1)
 		
-		while tileExists(moverTile) && !tileOccupied(moverTile) {
+		while tileExists(moverTile) {
+			if tileOccupied(moverTile)  {
+				if tilesHaveDifferentOwners(tile: tile, otherTile: moverTile) { moves.append(moverTile) }
+				break
+			}
 			moves.append(moverTile)
 			moverTile.column -= 1
-			if tileOccupied(moverTile) { break }
 		}
 		
 		return moves
