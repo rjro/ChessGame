@@ -22,13 +22,13 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	
 	private func commonInit() {
 		state = [[UIView?]](repeating: [UIView?](repeating: nil, count: board.size.columns), count: board.size.rows)
-
+		
 		
 		Chess.setupBoard(board)
 		
 		for (piece, tile) in board.occupations() {
 			let pieceView = UIView(frame: rectForTile(tile))
-					
+			
 			let pieceImageView = UIImageView(frame: CGRect(origin: .zero, size: pieceView.frame.size))
 			pieceImageView.image = UIImage(named: "\(piece.color)_\(piece.rank)")
 			pieceView.addSubview(pieceImageView)
@@ -36,19 +36,19 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			pieceView.layer.zPosition = 5
 			
 			state[tile.row][tile.column] = pieceView
-		
+			
 			let gr = UIPanGestureRecognizer(target: self, action: #selector(dragView(sender:)))
 			pieceView.addGestureRecognizer(gr)
 			gr.delegate = self
 			
-
+			
 			addSubview(pieceView)
 		}
 		
 		
 		/*
 		DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
-			self.capturePiece(tile: Tile(row: 0, column: 0))
+		self.capturePiece(tile: Tile(row: 0, column: 0))
 		}*/
 		
 		
@@ -60,9 +60,37 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 	//this seems OK for now
 	func movePiece(oldTile: Tile, newTile: Tile) {
 		
+		print("helllo??")
+		print("Moving from: \(Chess.Notation.tileToCoordinate(tile: oldTile)) to \(Chess.Notation.tileToCoordinate(tile: newTile))")
+		
 		UIView.animate(withDuration: 0.3) {
 			self.state[oldTile.row][oldTile.column]!.center = self.state[newTile.row][newTile.column]!.center
 		}
+		
+	}
+	
+	func movePiece(from tileA: Tile, to tileB: Tile, and capture: Bool) {
+		
+		print("Moving from: \(Chess.Notation.tileToCoordinate(tile: tileA)) to \(Chess.Notation.tileToCoordinate(tile: tileB))")
+		
+		if capture { capturePiece(tile: tileB) }
+		
+		board.movePiece(oldTile: tileA, newTile: tileB)
+
+		UIView.animate(withDuration: 0.1, animations: {
+			self.state[tileA.row][tileA.column]!.center = self.centerForTile(tileB)
+		}) { _ in
+			SoundPlayer.shared.playBonk()
+		}
+		
+		
+		let originalPiece = state[tileA.row][tileA.column]
+		state[tileA.row][tileA.column] = nil
+		state[tileB.row][tileB.column] = originalPiece
+		
+	}
+	
+	func placeDraggingPiece(_ draggingPiece: UIView, at tile: Tile) {
 		
 	}
 	
@@ -129,36 +157,40 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 			
 			var pieceDestination: CGPoint!
 			
-			//return valid, invalid, capture
-			//if capture, we have to fade out the piece!!!
 			
 			let (validMove, capture) = board.isValidMove(oldTile: dragStartTile!, newTile: newTile)
 			
-	
 			if validMove {
-				print("DID I GET A CAPTURE?!?!?!?!", capture)
-				if capture { self.capturePiece(tile: newTile) }
-				
-				pieceDestination = centerForTile(newTile)
-				board.movePiece(oldTile: dragStartTile!, newTile: newTile)
-				
-				let originalPiece = state[dragStartTile!.row][dragStartTile!.column]
-				state[dragStartTile!.row][dragStartTile!.column] = nil
-				state[newTile.row][newTile.column] = originalPiece	
-				
-				print("MOVED FROM:", dragStartTile!, "TO:", newTile)
+				movePiece(from: dragStartTile!, to: newTile, and: capture)
 			} else {
-				print("how to return to original location??")
-				pieceDestination = centerForTile(dragStartTile!)
+				movePiece(from: dragStartTile!, to: dragStartTile!, and: false)
 			}
-						
+			
+			/*
+			if validMove {
+			print("DID I GET A CAPTURE?!?!?!?!", capture)
+			if capture { self.capturePiece(tile: newTile) }
+			
+			pieceDestination = centerForTile(newTile)
+			board.movePiece(oldTile: dragStartTile!, newTile: newTile)
+			
+			let originalPiece = state[dragStartTile!.row][dragStartTile!.column]
+			state[dragStartTile!.row][dragStartTile!.column] = nil
+			state[newTile.row][newTile.column] = originalPiece
+			
+			print("MOVED FROM:", dragStartTile!, "TO:", newTile)
+			} else {
+			print("how to return to original location??")
+			pieceDestination = centerForTile(dragStartTile!)
+			}
+			
 			UIView.animate(withDuration: 0.1, animations: {
-				pieceView.center = pieceDestination
+			pieceView.center = pieceDestination
 			}) { _ in
-				SoundPlayer.shared.playBonk()
-
-			}
-				
+			SoundPlayer.shared.playBonk()
+			
+			}*/
+			
 			dragStartTile = nil
 			return
 		}
@@ -167,7 +199,7 @@ class ChessBoardView: UIView, Tiler, UIGestureRecognizerDelegate {
 		
 	}
 	
-
+	
 	override init(frame: CGRect) {
 		super.init(frame: frame)
 		commonInit()

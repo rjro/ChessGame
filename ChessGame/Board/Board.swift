@@ -16,6 +16,7 @@ class Board {
 	let size: BoardSize
 	
 	var state: [[Chess.Piece?]]
+	var deltas = [Chess.Delta]()
 	
 	init(size: BoardSize) {
 		self.size = size
@@ -80,11 +81,22 @@ class Board {
 		return moveMap[piece.rank]?(tile) ?? [Tile]()
 	}
 	
+	
+	//maybe refactor from this idea of "moves" into "deltas" that are consumed and
+	//reduced into the state?
 	func movePiece(oldTile: Tile, newTile: Tile) {
-		let piece = state[oldTile.row][oldTile.column]
+				
+	
+		guard let piece = state[oldTile.row][oldTile.column] else {
+			fatalError("Attempting to move a piece that does not exist!")
+		}
+			
+		deltas.append(Chess.Delta(piece: piece, oldTile: oldTile, newTile: newTile))
+		
 		state[oldTile.row][oldTile.column] = nil
 		state[newTile.row][newTile.column] = piece
 		print(state[oldTile.row][oldTile.column] ?? "piece now empty")
+		
 	}
 	
 	func printBoard() {

@@ -17,20 +17,20 @@ extension Chess.Moves {
 	static func pawn(tile: Tile, state: TileState) -> [Tile] {
 		var moves = [Tile]()
 		
-		let step = Chess.Moves.step(tile: tile, state: state)
-		let doubleStep = Chess.Moves.doubleStep(tile: tile, state: state)
+		let step = Chess.Moves.step(tile, state)
+		let doubleStep = Chess.Moves.doubleStep(tile, state)
 		
 		if state.exists(step) && !state.isOccupied(step) {
 			moves.append(step)
 			
 			if state.exists(doubleStep)
-				&& onOriginalTile(tile: tile, state: state)
+				&& onOriginalTile(tile, state)
 				&& !state.isOccupied(doubleStep) {
 				moves.append(doubleStep)
 			}
 		}
 		
-		for diagonal in diagonals(tile: tile, state: state) {
+		for diagonal in diagonals(tile, state) {
 			if state.exists(diagonal)
 				&& state.isOccupied(diagonal)
 				&& state.haveDifferentOwners(tile, diagonal) {
@@ -41,7 +41,7 @@ extension Chess.Moves {
 		return moves
 	}
 	
-	private static func step(tile: Tile, state: TileState) -> Tile {
+	private static func step(_ tile: Tile, _ state: TileState) -> Tile {
 		switch state.owner(tile) {
 			case .player: return Tile(row: tile.row-1, column: tile.column)
 			case .opponent: return Tile(row: tile.row+1, column: tile.column)
@@ -49,14 +49,14 @@ extension Chess.Moves {
 	}
 	
 	
-	private static func doubleStep(tile: Tile, state: TileState) -> Tile {
+	private static func doubleStep(_ tile: Tile, _ state: TileState) -> Tile {
 		switch state.owner(tile) {
 			case .player: return Tile(row: tile.row-2, column: tile.column)
 			case .opponent: return Tile(row: tile.row+2, column: tile.column)
 		}
 	}
 	
-	private static func diagonals(tile: Tile, state: TileState) -> [Tile] {
+	private static func diagonals(_ tile: Tile, _ state: TileState) -> [Tile] {
 		switch state.owner(tile) {
 			case .player: return [Tile(row: tile.row-1, column: tile.column-1),
 								  Tile(row: tile.row-1, column: tile.column+1) ]
@@ -64,7 +64,7 @@ extension Chess.Moves {
 									Tile(row: tile.row+1, column: tile.column+1) ]
 		}	}
 	
-	private static func onOriginalTile(tile: Tile, state: TileState) -> Bool {
+	private static func onOriginalTile(_ tile: Tile, _ state: TileState) -> Bool {
 		if state.owner(tile) == .player && tile.row == Chess.pawnRow.player {
 			return true
 		}

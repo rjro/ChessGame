@@ -17,6 +17,9 @@
 		8F6D33AD2473A99200FD85DC /* Piece.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6D33AC2473A99200FD85DC /* Piece.swift */; };
 		8F6D33AF2473AA5800FD85DC /* Moves.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6D33AE2473AA5800FD85DC /* Moves.swift */; };
 		8F6D33B22473AD5900FD85DC /* Pawn.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F6D33B12473AD5900FD85DC /* Pawn.swift */; };
+		8F7543F224790B48003F3A73 /* TileDelta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7543F124790B48003F3A73 /* TileDelta.swift */; };
+		8F7543F424790B8F003F3A73 /* Delta.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7543F324790B8F003F3A73 /* Delta.swift */; };
+		8F7543F824790E1E003F3A73 /* Notation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F7543F724790E1E003F3A73 /* Notation.swift */; };
 		8F821A82246732A40018FBBD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A81246732A40018FBBD /* AppDelegate.swift */; };
 		8F821A84246732A40018FBBD /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A83246732A40018FBBD /* SceneDelegate.swift */; };
 		8F821A86246732A40018FBBD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A85246732A40018FBBD /* ViewController.swift */; };
@@ -27,6 +30,7 @@
 		8F821A9A246773800018FBBD /* Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A99246773800018FBBD /* Extensions.swift */; };
 		8F821A9C246776AD0018FBBD /* Tile.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A9B246776AD0018FBBD /* Tile.swift */; };
 		8F821A9E24677F2C0018FBBD /* Tiler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F821A9D24677F2C0018FBBD /* Tiler.swift */; };
+		8F8E824D2473B963004A599B /* Bishop.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8F8E824C2473B963004A599B /* Bishop.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -40,6 +44,9 @@
 		8F6D33AC2473A99200FD85DC /* Piece.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Piece.swift; sourceTree = "<group>"; };
 		8F6D33AE2473AA5800FD85DC /* Moves.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Moves.swift; sourceTree = "<group>"; };
 		8F6D33B12473AD5900FD85DC /* Pawn.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Pawn.swift; sourceTree = "<group>"; };
+		8F7543F124790B48003F3A73 /* TileDelta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TileDelta.swift; sourceTree = "<group>"; };
+		8F7543F324790B8F003F3A73 /* Delta.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Delta.swift; path = Moves/Delta.swift; sourceTree = "<group>"; };
+		8F7543F724790E1E003F3A73 /* Notation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Notation.swift; sourceTree = "<group>"; };
 		8F821A7E246732A40018FBBD /* ChessGame.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ChessGame.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		8F821A81246732A40018FBBD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		8F821A83246732A40018FBBD /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -52,6 +59,7 @@
 		8F821A99246773800018FBBD /* Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Extensions.swift; sourceTree = "<group>"; };
 		8F821A9B246776AD0018FBBD /* Tile.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tile.swift; sourceTree = "<group>"; };
 		8F821A9D24677F2C0018FBBD /* Tiler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tiler.swift; sourceTree = "<group>"; };
+		8F8E824C2473B963004A599B /* Bishop.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Bishop.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -71,6 +79,9 @@
 				8F61DA812467B8140014910C /* Board.swift */,
 				8F821A9D24677F2C0018FBBD /* Tiler.swift */,
 				8F6D33A82473A78B00FD85DC /* TileState.swift */,
+				8F7543F124790B48003F3A73 /* TileDelta.swift */,
+				8F821A9B246776AD0018FBBD /* Tile.swift */,
+				8F247DA42468DC88008A18EB /* BoardMoves.swift */,
 			);
 			path = Board;
 			sourceTree = "<group>";
@@ -79,6 +90,8 @@
 			isa = PBXGroup;
 			children = (
 				8F247D9E2468D0BC008A18EB /* Chess.swift */,
+				8F7543F724790E1E003F3A73 /* Notation.swift */,
+				8F7543F324790B8F003F3A73 /* Delta.swift */,
 				8F6D33AC2473A99200FD85DC /* Piece.swift */,
 				8F6D33B02473AD4D00FD85DC /* Moves */,
 			);
@@ -90,6 +103,7 @@
 			children = (
 				8F6D33AE2473AA5800FD85DC /* Moves.swift */,
 				8F6D33B12473AD5900FD85DC /* Pawn.swift */,
+				8F8E824C2473B963004A599B /* Bishop.swift */,
 			);
 			path = Moves;
 			sourceTree = "<group>";
@@ -119,10 +133,8 @@
 				8F821A81246732A40018FBBD /* AppDelegate.swift */,
 				8F821A83246732A40018FBBD /* SceneDelegate.swift */,
 				8F821A85246732A40018FBBD /* ViewController.swift */,
-				8F247DA42468DC88008A18EB /* BoardMoves.swift */,
 				8F247DA02468D523008A18EB /* SoundPlayer.swift */,
 				8F821A99246773800018FBBD /* Extensions.swift */,
-				8F821A9B246776AD0018FBBD /* Tile.swift */,
 				8F247DA22468D67E008A18EB /* bonk.wav */,
 				8F821A8F246732A50018FBBD /* Info.plist */,
 				8F821A87246732A40018FBBD /* Main.storyboard */,
@@ -207,17 +219,21 @@
 			buildActionMask = 2147483647;
 			files = (
 				8F247DA12468D523008A18EB /* SoundPlayer.swift in Sources */,
+				8F7543F824790E1E003F3A73 /* Notation.swift in Sources */,
 				8F6D33A92473A78B00FD85DC /* TileState.swift in Sources */,
 				8F6D33AF2473AA5800FD85DC /* Moves.swift in Sources */,
 				8F247D9F2468D0BC008A18EB /* Chess.swift in Sources */,
 				8F821A86246732A40018FBBD /* ViewController.swift in Sources */,
 				8F821A9A246773800018FBBD /* Extensions.swift in Sources */,
+				8F7543F424790B8F003F3A73 /* Delta.swift in Sources */,
 				8F821A96246732CD0018FBBD /* ChessBoardView.swift in Sources */,
 				8F6D33AD2473A99200FD85DC /* Piece.swift in Sources */,
 				8F821A9C246776AD0018FBBD /* Tile.swift in Sources */,
+				8F7543F224790B48003F3A73 /* TileDelta.swift in Sources */,
 				8F821A82246732A40018FBBD /* AppDelegate.swift in Sources */,
 				8F821A9E24677F2C0018FBBD /* Tiler.swift in Sources */,
 				8F821A84246732A40018FBBD /* SceneDelegate.swift in Sources */,
+				8F8E824D2473B963004A599B /* Bishop.swift in Sources */,
 				8F61DA822467B8140014910C /* Board.swift in Sources */,
 				8F6D33B22473AD5900FD85DC /* Pawn.swift in Sources */,
 				8F247DA52468DC88008A18EB /* BoardMoves.swift in Sources */,
